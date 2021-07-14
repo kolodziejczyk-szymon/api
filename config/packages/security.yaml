@@ -11,7 +11,10 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-
+            json_login:
+                check_path: /login
+                username_path: security.credentials.login
+                password_path: security.credentials.password
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
