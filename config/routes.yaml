@@ -1,4 +1,0 @@
-login:
-    path:       /login
-    controller: App\Controller\SecurityController::login
-    methods: POST
