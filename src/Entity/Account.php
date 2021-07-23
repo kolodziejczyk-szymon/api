@@ -43,7 +43,7 @@ class Account
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="account")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accounts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

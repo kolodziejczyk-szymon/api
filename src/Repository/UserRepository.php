@@ -19,6 +19,17 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findAllUsersAccounts($user): array {
+
+        return $this->createQueryBuilder('u')
+            ->andWhere('acc.user = :user')
+            ->leftJoin('u.account', 'acc')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+    }
+
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

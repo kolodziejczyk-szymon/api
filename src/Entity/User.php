@@ -39,11 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\OneToMany(targetEntity=Account::class, mappedBy="user", orphanRemoval=true)
      */
-    private $account;
+    private $accounts;
 
     public function __construct(string $email)
     {
-        $this->account = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
         $this->email = $email;
     }
 
@@ -91,32 +91,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection|Account[]
      */
-    public function getAccount(): Collection
+    public function getAccounts(): Collection
     {
-        return $this->account;
+        return $this->accounts;
     }
 
-    public function addAccount(Account $account): self
-    {
-        if (!$this->account->contains($account)) {
-            $this->account[] = $account;
-            $account->setUser($this);
-        }
+    // public function addAccount(Account $account): self
+    // {
+    //     if (!$this->account->contains($account)) {
+    //         $this->account[] = $account;
+    //         $account->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeAccount(Account $account): self
-    {
-        if ($this->account->removeElement($account)) {
-            // set the owning side to null (unless already changed)
-            if ($account->getUser() === $this) {
-                $account->setUser(null);
-            }
-        }
+    // public function removeAccount(Account $account): self
+    // {
+    //     if ($this->account->removeElement($account)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($account->getUser() === $this) {
+    //             $account->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getRoles()
     {

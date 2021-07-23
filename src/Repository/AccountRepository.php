@@ -19,21 +19,7 @@ class AccountRepository extends ServiceEntityRepository
         parent::__construct($registry, Account::class);
     }
 
-    public function findAllUsersAccounts($id): array {
 
-        $conn = $this->getEntityManager()->getConnection();
-
-        $sql = '
-            SELECT a.id, a.name, a.password, a.url, a.description FROM account a
-            LEFT JOIN user u ON a.user_id = u.id
-            ORDER BY a.id ASC
-            ';
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(['id' => $id]);
-
-        // returns an array of arrays (i.e. a raw data set)
-        return $stmt->fetchAllAssociative();
-    }
 
     // /**
     //  * @return Account[] Returns an array of Account objects

@@ -58,6 +58,7 @@ class AccountController extends AbstractController
 
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($account);
+        $manager->persist($user);
         $manager->flush();
 
         return new JsonResponse([
@@ -72,19 +73,31 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/all", name="get_account", methods={"POST"})
      */
-    public function getAccount(Request $request){
+    public function getAllAccounts(Request $request){
         $data = json_decode($request->getContent(), true) ?? [];
 
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $data['email']
         ]);
 
-        $allAccounts = $this->getDoctrine()->getRepository(Account::class)->findAllUsersAccounts($user->getId());
+        $accounts = $this->getDoctrine()->getRepository(Account::class)->findBy(
+            ['user' => $user]);
 
+        foreach($accounts as $item) {
+            $arrayCollection[] = array(
+                'id' => $item->getId(),
+                'name' => $item->getName(),
+                'description' => $item->getDescription(),
+                'password' => $item->getPassword(),
+                'url' => $item->getUrl(),
+                // ... Same for each property you want
+            );
+        }
+        
         return new JsonResponse([
             'status' => 'OK',
             'data' => [
-                'accounts' => $allAccounts,
+                'accounts' => $arrayCollection,
             ]
         ]);
     }
