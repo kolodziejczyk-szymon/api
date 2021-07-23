@@ -73,7 +73,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/all", name="get_account", methods={"POST"})
      */
-    public function getAllAccounts(Request $request){
+    public function getAllAccountsAction(Request $request){
         $data = json_decode($request->getContent(), true) ?? [];
 
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
@@ -101,6 +101,39 @@ class AccountController extends AbstractController
             ]
         ]);
     }
+
+   /**
+     * @Route("/account/edit", methods={"PUT"})
+     */
+    public function updateAccountAction(Request $request)
+    {
+        $data = json_decode($request->getContent(), true) ?? [];
+        $id = $data['id'];
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $account = $entityManager->getRepository(Account::class)->find($id);
+
+        if (!$account) {
+            throw $this->createNotFoundException(
+                'No product found for id '.$id
+            );
+        }
+
+        $account->setName($data['name']);
+        $account->setDescription($data['description']);
+        $account->setUsername($data['username']);
+        $account->setPassword($data['password']);
+        $account->setUrl($data['url']);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'status' => 'OK',
+            'data' => [
+                'id' => $account->getId(),
+            ]
+        ]);
+    }
+
 
     private function validate(array $data) {
         return $this->validator->validate($data, new Constraints\Collection([
