@@ -83,15 +83,19 @@ class AccountController extends AbstractController
         $accounts = $this->getDoctrine()->getRepository(Account::class)->findBy(
             ['user' => $user]);
 
-        foreach($accounts as $item) {
-            $arrayCollection[] = array(
-                'id' => $item->getId(),
-                'name' => $item->getName(),
-                'description' => $item->getDescription(),
-                'password' => $item->getPassword(),
-                'url' => $item->getUrl(),
-                // ... Same for each property you want
-            );
+        if ($accounts) {
+            foreach($accounts as $item) {
+                $arrayCollection[] = array(
+                    'id' => $item->getId(),
+                    'name' => $item->getName(),
+                    'description' => $item->getDescription(),
+                    'password' => $item->getPassword(),
+                    'url' => $item->getUrl(),
+                    // ... Same for each property you want
+                );
+            }            
+        } else {
+            $arrayCollection = [];
         }
         
         return new JsonResponse([
@@ -131,6 +135,23 @@ class AccountController extends AbstractController
             'data' => [
                 'id' => $account->getId(),
             ]
+        ]);
+    }
+
+       /**
+     * @Route("/account/delete/{id}", methods={"DELETE"})
+     */
+    public function deleteAccountAction(int $id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Account::class);
+        $account = $repository->find($id);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($account);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'status' => 'OK'
         ]);
     }
 
