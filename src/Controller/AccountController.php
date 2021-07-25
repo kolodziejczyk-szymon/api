@@ -53,6 +53,7 @@ class AccountController extends AbstractController
         $account->setUsername($data['username']);
         $account->setPassword($data['password']);
         $account->setUrl($data['url']);
+        $account->setUsername($data['username']);
         $account->setDescription($data['description']);
         $account->setUser($user);
 
@@ -64,8 +65,13 @@ class AccountController extends AbstractController
         return new JsonResponse([
             'status' => 'OK',
             'data' => [
-                'id' => $user->getId(),
-                'email' => $user->getEmail()
+                'id' => $account->getId(),
+                'name' => $account->getName(),
+                'email' => $user->getEmail(),
+                'username' => $account->getUsername(),
+                'password' => $account->getPassword(),
+                'url' => $account->getUrl(),
+                'description' => $account->getDescription(),
             ]
         ]);
     }
@@ -89,6 +95,7 @@ class AccountController extends AbstractController
                     'id' => $item->getId(),
                     'name' => $item->getName(),
                     'description' => $item->getDescription(),
+                    'username' => $item->getUsername(),
                     'password' => $item->getPassword(),
                     'url' => $item->getUrl(),
                     // ... Same for each property you want
